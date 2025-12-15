@@ -7,11 +7,22 @@ import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import companies from "../data/companies.json";
+import faq from "../data/faq.json";
 
 function LandingPage() {
   const autoplay = useRef(
@@ -41,7 +52,7 @@ function LandingPage() {
           Explore opportunities or find the perfect candidate - all in one place
         </p>
       </div>
-      <div className="mt-14 flex justify-center gap-3 sm:gap-6 items-center  py-4 px-2">
+      <div className="mt-14 flex justify-center gap-3 sm:gap-12 items-center  py-4 px-2">
         <Link to="/jobs">
           <Button variant="destructive" size="xl">
             Find Jobs
@@ -77,6 +88,50 @@ function LandingPage() {
       </div>
       <div className="mt-10 px-4 sm:px-10 py-4">
         <img src={Banner} alt="Banner" className="w-full" />
+      </div>
+      <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-10 px-4 sm:px-10 py-4">
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <h1 className="text-base sm:text-2xl">For Job Seekers</h1>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs sm:text-base">
+              Search and apply for jobs, track applications, and more.
+            </p>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>
+              <h1 className="text-base sm:text-2xl">For Employers</h1>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-xs sm:text-base">
+              Post jobs, manage applications, and find the best candidates.
+            </p>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="mt-20 px-4 sm:px-10 py-4">
+        <h1 className="text-base sm:text-2xl mb-3">FAQs:</h1>
+        <Accordion type="single" collapsible>
+          {faq.map((item, index) => (
+            <div key={index}>
+              <AccordionItem value={`item-${index + 1}`}>
+                <AccordionTrigger>
+                  <h1 className="text-base sm:text-xl">{item.question}</h1>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <p className="text-xs sm:text-sm"></p>
+                  {item.answer}
+                </AccordionContent>
+              </AccordionItem>
+            </div>
+          ))}
+        </Accordion>
       </div>
     </div>
   );
