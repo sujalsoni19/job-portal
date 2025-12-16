@@ -1,6 +1,6 @@
 import logoLight from "../assets/logo-light.png";
 import logoDark from "../assets/logo-dark.png";
-import { useTheme } from "../components/themeprovider";
+import { useTheme } from "./themeprovider.jsx";
 
 export default function Logo() {
   const { theme } = useTheme();

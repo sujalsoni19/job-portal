@@ -12,6 +12,11 @@ function ProtectedRoute({ children }) {
     return <Navigate to="/?sign-in=true" replace />;
   }
 
+ if (!user?.unsafeMetadata?.role && pathname !== "/onboarding") {
+  return <Navigate to="/onboarding" replace />;
+}
+
+
   return children;
 }
 

@@ -1,7 +1,7 @@
 import { ModeToggle } from "@/components/ui/themetoggle";
 import { Link, useSearchParams } from "react-router-dom";
 import React, { useState, useEffect } from "react";
-import Logo from "../pages/Logo";
+import Logo from "../components/Logo.jsx";
 import { Button } from "@/components/ui/button";
 import {
   PenBoxIcon,
@@ -9,7 +9,13 @@ import {
   BriefcaseBusinessIcon,
   Heart,
 } from "lucide-react";
-import { SignedIn, SignedOut, UserButton, SignIn } from "@clerk/clerk-react";
+import {
+  SignedIn,
+  SignedOut,
+  UserButton,
+  SignIn,
+  useUser,
+} from "@clerk/clerk-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -17,6 +23,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 function Header() {
+  const { user } = useUser();
+
   const [showSignIn, setshowSignIn] = useState(false);
 
   const [search, setSearch] = useSearchParams();
@@ -62,30 +70,32 @@ function Header() {
                 </Button>
               </SignedOut>
 
-              <SignedIn >
+              <SignedIn>
                 <div className="flex mb-1 justify-center">
                   <UserButton>
-                  <UserButton.MenuItems>
-                    <UserButton.Link
-                      label="My Jobs"
-                      labelIcon={<BriefcaseBusinessIcon size={15} />}
-                      href="/my-jobs"
-                    />
-                    <UserButton.Link
-                      label="Saved Jobs"
-                      labelIcon={<Heart size={15} />}
-                      href="/saved-jobs"
-                    />
-                  </UserButton.MenuItems>
-                </UserButton>
+                    <UserButton.MenuItems>
+                      <UserButton.Link
+                        label="My Jobs"
+                        labelIcon={<BriefcaseBusinessIcon size={15} />}
+                        href="/my-jobs"
+                      />
+                      <UserButton.Link
+                        label="Saved Jobs"
+                        labelIcon={<Heart size={15} />}
+                        href="/saved-jobs"
+                      />
+                    </UserButton.MenuItems>
+                  </UserButton>
                 </div>
-                
-                <Link to="/post-job">
-                  <Button variant="blue" className="w-full">
-                    <PenBoxIcon className="mr-2 h-4 w-4" />
-                    Post a Job
-                  </Button>
-                </Link>
+
+                {user?.unsafeMetadata?.role === "recruiter" && (
+                  <Link to="/post-job">
+                    <Button variant="blue" className="w-full">
+                      <PenBoxIcon className="mr-2 h-4 w-4" />
+                      Post a Job
+                    </Button>
+                  </Link>
+                )}
               </SignedIn>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -118,12 +128,14 @@ function Header() {
                   />
                 </UserButton.MenuItems>
               </UserButton>
-              <Link to="/post-job">
-                <Button variant="blue" className="w-full">
-                  <PenBoxIcon className="mr-2 h-4 w-4" />
-                  Post a Job
-                </Button>
-              </Link>
+              {user?.unsafeMetadata?.role === "recruiter" && (
+                  <Link to="/post-job">
+                    <Button variant="blue" className="w-full">
+                      <PenBoxIcon className="mr-2 h-4 w-4" />
+                      Post a Job
+                    </Button>
+                  </Link>
+                )}
             </SignedIn>
           </div>
         </div>

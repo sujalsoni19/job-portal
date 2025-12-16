@@ -18,8 +18,6 @@ import { shadcn } from "@clerk/themes";
 import ProtectedRoute from "./components/protected_route.jsx";
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
-console.log(PUBLISHABLE_KEY);
-
 if (!PUBLISHABLE_KEY) {
   throw new Error("Add your Clerk Publishable Key to the .env file");
 }

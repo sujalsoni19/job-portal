@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import Logo from "./Logo";
+import Logo from "../components/Logo.jsx";
 import Banner from "../assets/banner.png";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";

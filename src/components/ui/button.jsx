@@ -34,6 +34,8 @@ const buttonVariants = cva(
 
         // 📐 NEW
         xl: "h-10 sm:h-12 rounded-lg px-8 text-base has-[>svg]:px-6",
+        "4xl": "h-12 sm:h-18 rounded-xl px-14 text-base sm:text-2xl has-[>svg]:px-10",
+
       },
     },
     defaultVariants: {
