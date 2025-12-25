@@ -20,15 +20,14 @@ function Jobcard({
   savedInit = false,
   onJobSaved = () => {},
 }) {
+  const [saved, setSaved] = useState(savedInit);
 
-    const [saved, setSaved] = useState(savedInit);
-
-    const {
+  const {
     fn: fnsavedJob,
     data: savedJob,
     loading: loadingsavedJob,
     error,
-  } = useFetch( saveJob ,{
+  } = useFetch(saveJob, {
     alreadySaved: saved,
   });
 
@@ -36,15 +35,15 @@ function Jobcard({
 
   const handleSaveJob = async () => {
     await fnsavedJob({
-        user_id: user.id,
-        job_id: job.id
+      user_id: user.id,
+      job_id: job.id,
     });
     onJobSaved();
-  }
+  };
 
-  useEffect(()=>{
-    if(savedJob!==undefined) setSaved(savedJob?.length > 0)
-  },[savedJob])
+  useEffect(() => {
+    if (savedJob !== undefined) setSaved(savedJob?.length > 0);
+  }, [savedJob]);
 
   return (
     <Card className="flex">
@@ -77,30 +76,21 @@ function Jobcard({
         </p>
       </CardContent>
       <CardFooter className="flex gap-10 sm:gap-6 justify-between">
-        <Link to={`/job/${job.id}`}>
+        <Link to={`/job/${job.id}`} className="flex flex-1">
           <Button variant="blue" className="flex-1">
             More details
           </Button>
         </Link>
         {!isMyJob && (
-            <Button
+          <Button
             variant="outline"
             className="w-15"
             onClick={handleSaveJob}
             disabled={loadingsavedJob}
-            >
-                {
-                    saved ? (
-                        <HeartIcon fill="red" stroke="red" />
-                    ) : (
-                        <HeartIcon />
-                    )
-                }
-
-            </Button>
+          >
+            {saved ? <HeartIcon fill="red" stroke="red" /> : <HeartIcon />}
+          </Button>
         )}
-
-        
       </CardFooter>
     </Card>
   );
