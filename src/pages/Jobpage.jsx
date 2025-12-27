@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/select";
 import { Briefcase, DoorClosedIcon, DoorOpenIcon, MapPin } from "lucide-react";
 import MDEditor from "@uiw/react-md-editor";
+import Applyjobdrawer from "@/components/Applyjobdrawer";
 
 function Jobpage() {
   const { isLoaded, user } = useUser();
@@ -42,8 +43,8 @@ function Jobpage() {
 
   const handleStatusChange = (value) => {
     const isOpen = value === "open";
-    fnhiringJobStatus(isOpen).then(()=> fnJob());
-  }
+    fnhiringJobStatus(isOpen).then(() => fnJob());
+  };
 
   if (!isLoaded || loadingJob) {
     return (
@@ -53,19 +54,16 @@ function Jobpage() {
     );
   }
 
-  if(loadinghiringJobStatus){
+  if (loadinghiringJobStatus) {
     return (
       <div className="flex-1 flex justify-center items-center">
         <DotLoader color="blue" />
       </div>
     );
   }
-
-  console.log(job?.requirements);
-
-
+  
   return (
-    <div className="w-full flex flex-col mt-5">
+    <div className="w-full flex flex-col">
       <div className="flex flex-col gap-3 sm:flex-row px-4 sm:px-10 py-2 sm:justify-between sm:items-center">
         <div
           className="text-xl sm:text-4xl lg:text-6xl font-extrabold 
@@ -107,41 +105,49 @@ function Jobpage() {
               Closed
             </span>
           )}
-        </div>   
+        </div>
       </div>
-         { job?.recruiter_id === user?.id && (
-          <div className="mt-4 flex justify-between items-center px-4 sm:px-10">
-            <Select  onValueChange={handleStatusChange}>
-          <SelectTrigger 
-          className="w-full bg-red-500">
-            <SelectValue 
-            placeholder={
-              "Hiring Status " + (job?.isOpen ? "( Open )" : "( Closed )")
-            } />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-                  <SelectItem value="open">Open</SelectItem>
-                  <SelectItem value="closed">Closed</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-          </div>
-           
-         )} 
+      {job?.recruiter_id === user?.id && (
+        <div className="mt-4 flex justify-between items-center px-4 sm:px-10">
+          <Select onValueChange={handleStatusChange}>
+            <SelectTrigger className="w-full">
+              <SelectValue
+                placeholder={
+                  "Hiring Status " + (job?.isOpen ? "( Open )" : "( Closed )")
+                }
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="open">Open</SelectItem>
+                <SelectItem value="closed">Closed</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
       <div className="mt-8 px-4 flex flex-col gap-3 sm:gap-6 sm:px-10">
         <h1 className="font-extrabold sm:text-4xl  text-2xl ">About the Job</h1>
         <p className="text-sm sm:text-xl">{job?.description}</p>
       </div>
       <div className="mt-8 px-4 flex flex-col gap-3 sm:gap-6 sm:px-10">
-          <h1 className="font-extrabold sm:text-4xl text-2xl">What are we looking for</h1>
-          <MDEditor.Markdown source={job?.requirements}  className="
-    bg-transparent
-    [&_ul]:list-disc
-    [&_ul]:pl-6
-    [&_li]:mb-1
-  "/>
+        <h1 className="font-extrabold sm:text-4xl text-2xl">
+          What are we looking for
+        </h1>
+        <MDEditor.Markdown source={job?.requirements} />
       </div>
+
+      {job?.recruiter_id !== user?.id && (
+        <div className="flex justify-center mt-8">
+          <Applyjobdrawer
+          job={job}
+          user={user}
+          fetchJob={fnJob}
+          applied={job?.applications.find((app)=> app.candidate_id === user.id)}
+           />
+        </div>
+        )
+      }
     </div>
   );
 }
