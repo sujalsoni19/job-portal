@@ -16,11 +16,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Label } from "@/components/ui/label";
 import { DotLoader, BarLoader } from "react-spinners";
 import { State } from "country-state-city";
 import MDEditor from "@uiw/react-md-editor";
 import { Button } from "@/components/ui/button";
 import { addNewJob } from "@/api/apiJobs";
+import Addcompanydrawer from "@/components/Addcompanydrawer";
 
 const schema = z.object({
   title: z.string().min(1, { message: "Title is required" }),
@@ -90,7 +92,7 @@ function PostJob() {
   }
 
   return (
-    <div className="flex flex-col items-center w-full mt-6 px-4 sm:px-10">
+    <div className="flex flex-col items-center w-full mt-2 px-4 sm:px-10">
       <h1
         className="text-2xl sm:text-4xl
               md:text-6xl font-extrabold text-center
@@ -103,7 +105,7 @@ function PostJob() {
       </h1>
       <form
         onSubmit={handleSubmit(onformsubmit)}
-        className="mt-4 sm:px-20 flex flex-col gap-6 w-full"
+        className="mt-4 sm:px-20 flex flex-col gap-5 w-full"
       >
         <Input placeholder="job title..." {...register("title")} />
         {errors.title && <p className="text-red-500">{errors.title.message}</p>}
@@ -114,69 +116,83 @@ function PostJob() {
         {errors.description && (
           <p className="text-red-500">{errors.description.message}</p>
         )}
-        <div className="flex gap-1 sm:gap-10">
-          <Controller
-            name="location"
-            control={control}
-            render={({ field }) => (
-              <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger className="w-full sm:flex-1">
-                  <SelectValue placeholder="Filter by State" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {State.getStatesOfCountry("IN").map(({ name }) => {
-                      return (
-                        <SelectItem key={name} value={name}>
-                          {name}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+        <div className="flex gap-3 flex-col sm:flex-row sm:gap-10">
+          <div className="flex gap-2 sm:gap-10 flex-1">
+            <Controller
+              name="location"
+              control={control}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full sm:flex-1">
+                    <SelectValue placeholder="location" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {State.getStatesOfCountry("IN").map(({ name }) => {
+                        return (
+                          <SelectItem key={name} value={name}>
+                            {name}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            <Controller
+              name="company_id"
+              control={control}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full sm:flex-1">
+                    <SelectValue placeholder="company">
+                      {field.value
+                        ? Companies?.find(
+                            (com) => com.id === Number(field.value)
+                          )?.name
+                        : "Company"}
+                    </SelectValue>
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      {Companies?.map(({ name, id }) => {
+                        return (
+                          <SelectItem key={id} value={id}>
+                            {name}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+          <div>
+            <Addcompanydrawer fetchCompanies={fnCompanies} />
+            {errors.location && (
+              <p className="text-red-500">{errors.location.message}</p>
             )}
-          />
-          <Controller
-            name="company_id"
-            control={control}
-            render={({ field }) => (
-              <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger className="w-full sm:flex-1">
-                  <SelectValue placeholder="Company">
-                    {field.value
-                      ? Companies?.find((com) => com.id === Number(field.value))
-                          ?.name
-                      : "Company"}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {Companies?.map(({ name, id }) => {
-                      return (
-                        <SelectItem key={id} value={id}>
-                          {name}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+            {errors.company_id && (
+              <p className="text-red-500">{errors.company_id.message}</p>
             )}
-          />
-          {errors.location && (
-            <p className="text-red-500">{errors.location.message}</p>
-          )}
-          {errors.company_id && (
-            <p className="text-red-500">{errors.company_id.message}</p>
-          )}
+          </div>
         </div>
 
         <Controller
           name="requirements"
           control={control}
           render={({ field }) => (
-            <MDEditor value={field.value} onChange={field.onChange} />
+            <div className="space-y-2">
+              <Label htmlFor="requirements">Job Requirements:</Label>
+
+              <MDEditor
+                id="requirements"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            </div>
           )}
         />
 
