@@ -9,12 +9,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Accordion,
   AccordionContent,
@@ -70,16 +65,22 @@ function LandingPage() {
           plugins={[autoplay.current]}
           className="w-full py-10"
         >
-          <CarouselContent className="flex items-center">
+          <CarouselContent className="flex gap-0 sm:gap-8 md:gap-18">
             {companies.map((item) => (
               <CarouselItem
                 key={item.id}
-                className="bg-zinc-400 mr-8 ml-8 flex justify-center p-5 basis-1/3 lg:basis-1/6 "
+                className="
+                          flex justify-center gap-4 items-center p-4
+                          basis-full
+                          sm:basis-1/3
+                          lg:basis-1/6 
+                          last:mr-8 
+                        "
               >
                 <img
                   src={item.path}
                   alt={item.name}
-                  className="h-9 sm:h-14 object-contain "
+                  className="h-8 sm:h-12 md:h-14 object-contain"
                 />
               </CarouselItem>
             ))}
