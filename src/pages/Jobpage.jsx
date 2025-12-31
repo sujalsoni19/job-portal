@@ -138,7 +138,7 @@ function Jobpage() {
         <MDEditor.Markdown source={job?.requirements} />
       </div>
 
-      {job?.recruiter_id !== user?.id && (
+      {job?.recruiter_id !== user?.id && user?.unsafeMetadata?.role === "candidate" && (
         <div className="flex justify-center mt-8">
           <Applyjobdrawer
           job={job}
